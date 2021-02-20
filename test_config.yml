@@ -1,0 +1,9 @@
+broker_auth:
+  user: user
+  password: password
+service_name: credhub
+service_id: credhub
+basic_plan_name: basic
+basic_plan_id: basic
+description: Broker to write a credhub credential
+long_description: Broker to write a credhub credential
