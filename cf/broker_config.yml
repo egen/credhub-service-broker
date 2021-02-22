@@ -1,0 +1,14 @@
+credhub:
+  server: (( param "Please provide credhub.server" ))
+  client: (( param "Please provide credhub.client" ))
+  secret: (( param "Please provide credhub.secret" ))
+
+broker_auth:
+  user: (( param "Please override broker_auth.user" ))
+  password: (( param "Please override broker_auth.password" ))
+service_name: credhub
+service_id: credhub
+basic_plan_name: basic
+basic_plan_id: basic
+description: Broker to write a credhub credential
+long_description: Broker to write a credhub credential

@@ -3,11 +3,10 @@ package config
 import (
 	"os"
 
-	// "github.com/cloudfoundry-community/go-credhub"
 	"gopkg.in/yaml.v3"
 )
 
-const ConfigEnvVarName string = "CONFIG_SERVER_BROKER_CONFIG"
+const ConfigEnvVarName string = "CREDHUB_SERVICE_BROKER_CONFIG"
 
 type Config struct {
 	Credhub             CredhubConf `yaml:"credhub"`

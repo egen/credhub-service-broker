@@ -1,0 +1,7 @@
+---
+applications:
+  - hostname: kubecf.ocf.west.com
+    name: credhub-broker
+    path: ./
+    env:
+      CREDHUB_SERVICE_BROKER_CONFIG: ((credhub_service_broker_config))
