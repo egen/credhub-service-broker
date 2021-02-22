@@ -2,12 +2,14 @@ package broker
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 
+	"code.cloudfoundry.org/credhub-cli/credhub/credentials/values"
 	"code.cloudfoundry.org/lager"
 	brokerapi "github.com/pivotal-cf/brokerapi/domain"
-	"github.com/starkandwayne/credhub-server-broker/config"
+	"github.com/starkandwayne/credhub-service-broker/config"
 )
 
 type ConfigServerBroker struct {
@@ -49,20 +51,52 @@ func (broker *ConfigServerBroker) Services(ctx context.Context) ([]brokerapi.Ser
 	}, nil
 }
 
-type InstanceParams struct {
-	jcredName string `json:"name"`
-	credValue string `json:"value"`
-}
-
 func (broker *ConfigServerBroker) Provision(ctx context.Context, instanceID string, serviceDetails brokerapi.ProvisionDetails, asyncAllowed bool) (spec brokerapi.ProvisionedServiceSpec, err error) {
 	spec = brokerapi.ProvisionedServiceSpec{}
+
+	value := values.JSON{}
+	err = json.Unmarshal(serviceDetails.RawParameters, &value)
+
+	if err != nil {
+		return spec, err
+	}
 	broker.Logger.Info("provision")
+
+	chcli, err := NewCredHub(
+		broker.Config,
+		broker.Logger,
+	)
+	if err != nil {
+		return spec, err
+	}
+
+	chcli.WriteSecret(instanceID, value)
+
+	if err != nil {
+		return spec, err
+	}
 
 	return spec, nil
 }
 
 func (broker *ConfigServerBroker) Deprovision(ctx context.Context, instanceID string, details brokerapi.DeprovisionDetails, asyncAllowed bool) (brokerapi.DeprovisionServiceSpec, error) {
 	spec := brokerapi.DeprovisionServiceSpec{}
+
+	broker.Logger.Info("deprovision")
+
+	chcli, err := NewCredHub(
+		broker.Config,
+		broker.Logger,
+	)
+	if err != nil {
+		return spec, err
+	}
+
+	chcli.DeleteSecret(instanceID)
+
+	if err != nil {
+		return spec, err
+	}
 
 	return spec, nil
 }
@@ -75,6 +109,18 @@ func (broker *ConfigServerBroker) Unbind(ctx context.Context, instanceID, bindin
 
 func (broker *ConfigServerBroker) Bind(ctx context.Context, instanceID, bindingID string, details brokerapi.BindDetails, asyncAllowed bool) (brokerapi.Binding, error) {
 	binding := brokerapi.Binding{}
+	chcli, err := NewCredHub(
+		broker.Config,
+		broker.Logger,
+	)
+	if err != nil {
+		return binding, err
+	}
+	binding = brokerapi.Binding{
+		Credentials: map[string]string{
+			"credhub-ref": chcli.MakePath(instanceID),
+		},
+	}
 
 	return binding, nil
 }

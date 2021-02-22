@@ -1,3 +1,7 @@
+credhub:
+  server: https://10.128.152.0:8844
+  client: credhub-admin
+  secret: 39SjuhUeYNJXhA0YLgtw07tJFA1t93KK
 broker_auth:
   user: user
   password: password

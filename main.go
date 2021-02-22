@@ -6,12 +6,12 @@ import (
 
 	"code.cloudfoundry.org/lager"
 	"github.com/pivotal-cf/brokerapi"
-	"github.com/starkandwayne/credhub-server-broker/broker"
-	"github.com/starkandwayne/credhub-server-broker/config"
+	"github.com/starkandwayne/credhub-service-broker/broker"
+	"github.com/starkandwayne/credhub-service-broker/config"
 )
 
 func main() {
-	brokerLogger := lager.NewLogger("credhub-server-broker")
+	brokerLogger := lager.NewLogger("credhub-service-broker")
 	brokerLogger.RegisterSink(lager.NewWriterSink(os.Stdout, lager.DEBUG))
 	brokerLogger.RegisterSink(lager.NewWriterSink(os.Stderr, lager.ERROR))
 
