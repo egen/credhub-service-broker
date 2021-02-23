@@ -70,7 +70,7 @@ func (broker *ConfigServerBroker) Provision(ctx context.Context, instanceID stri
 		return spec, err
 	}
 
-	chcli.WriteSecret(instanceID, value)
+	err = chcli.WriteSecret(instanceID, value)
 
 	if err != nil {
 		return spec, err
@@ -92,7 +92,7 @@ func (broker *ConfigServerBroker) Deprovision(ctx context.Context, instanceID st
 		return spec, err
 	}
 
-	chcli.DeleteSecret(instanceID)
+	err = chcli.DeleteSecret(instanceID)
 
 	if err != nil {
 		return spec, err
