@@ -26,6 +26,7 @@ func NewCredHub(config config.Config, logger lager.Logger) (CredHub, error) {
 	)
 
 	if err != nil {
+		logger.Error("could-not-create-credhub", err)
 		return nil, err
 	}
 	return &credhub{client: ch, logger: logger, config: config}, nil

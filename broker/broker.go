@@ -66,6 +66,7 @@ func (broker *ConfigServerBroker) Provision(ctx context.Context, instanceID stri
 		broker.Config,
 		broker.Logger,
 	)
+
 	if err != nil {
 		return spec, err
 	}
