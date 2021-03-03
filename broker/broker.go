@@ -117,6 +117,12 @@ func (broker *ConfigServerBroker) Bind(ctx context.Context, instanceID, bindingI
 	if err != nil {
 		return binding, err
 	}
+
+	err = chcli.AddReadPermission(instanceID, details.AppGUID)
+	if err != nil {
+		return binding, err
+	}
+
 	binding = brokerapi.Binding{
 		Credentials: map[string]string{
 			"credhub-ref": chcli.MakePath(instanceID),
